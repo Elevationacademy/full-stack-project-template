@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WhetherWeather</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+
+</head>
+
+<body>
+
+    <div id="search">
+        <input type="text" placeholder="Address" id="addr-input">
+        <input type="number" class="min price" placeholder="Min. Price" id="min-p-input">
+        <input type="number" class="max price" placeholder="Max Price" id="max-p-input">
+        <input type="number" class="min room" placeholder="Min. Rooms" id="min-r-input">
+        <input type="number" class="max room" placeholder="Max Rooms" id="max-r-input">
+
+        <div class="check-group">
+            <input class="form-radio" type="checkbox" name="immediate" id="immed-y">
+            <label for="immediate">Immediate</label>
+        </div>
+        <div class="check-group">
+            <input class="form-radio" type="checkbox" name="parking" id="park-y">
+            <label for="parking">Parking</label>
+        </div>
+
+        <button>Find Apartments</button>
+    </div>
+
+    <hr>
+
+     <!-- apartments=[
+        {img:img,
+            rooms:rooms,
+            price:price,
+            address:address,
+            parking:parking}
+        ] -->
+    <script id="store-template" type="text/x-handlebars-template">
+        {{#each apartments}}
+            <div class="result">
+                <img src="{{img}}">
+                <div class="label"></div>
+                {{#if parking}}
+                    <div class="l-park">Parking :</div>
+                    <div class="parking">Available</div>
+                {{/if}}
+                <div class="l-rooms">Rooms :</div> 
+                <div class="rooms">{{rooms}}</div>
+                <div class="l-price">Price :</PRe> </div> 
+                <div class="price">{{price}}</div>
+                <div class="l-addr">Address :</div>
+                <div class="address">{{address}}</div>
+                <!-- {{#if immediate}}
+                    <div class="l-contact">Contact us :
+                        <div class="cont">
+                            {{contactDetails.name}} - {{contactDetails.email}}
+                        </div>
+                    </div>
+                    
+                {{/if}}     -->
+                    
+            </div>    
+        
+        {{/each}}
+    </script>
+    
+    <div id="results"></div>
+    <script id="no-available" type="text/x-handlebars-template">
+        <div class="no-match">{{str}}</div>
+    </script>
+
+
+    <script src="./jquery/dist/jquery.js"></script>
+    <script src="./handlebars/dist/handlebars.js"></script>
+    <script src="DataModel.js"></script>
+    <script src="Renderer.js"></script>
+    <script src="main.js"></script>
+</body>
+
+
+</html>
