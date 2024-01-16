@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Item = require('../models/Item')
-const dbManager = require('./server/DBManager')
+const dbManager = require('../DBManager')
 const User = require('../models/user')
 const Activity = require('../models/activity')
-
 
 
 router.get('/', async function(req, res){
@@ -13,8 +12,7 @@ router.get('/', async function(req, res){
         res.end()
     }catch(err){
         console.error(err);
-        throw new Error(`Failed to generate data`);
-        res.status(400).send(err => err)
+        res.status(400).send(err)
     }
 
 })
@@ -25,6 +23,17 @@ router.get('/get', (req, res) => {
         res.send(data)
     })
 });
+
+router.delete('/:activityId', async function(req, res){
+    try{
+    const activityId = req.params.activityId
+    await Activity.findOneAndDelete({_id: activityId})
+    res.status(200).end()
+    }catch(err){
+        console.error(err)
+        res.status(400).send(err)
+    }
+})
 
 router.post('/:userId', async function(req, res){
     try{
@@ -52,5 +61,6 @@ router.post('/:userId', async function(req, res){
         res.status(400).send(err)
     }
 })
+
 
 module.exports = router
