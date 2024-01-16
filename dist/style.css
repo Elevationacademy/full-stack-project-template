@@ -1,72 +1,57 @@
-*{
-    padding: 0;
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3vmax;
+.nav-link:hover{
+    color: lightsalmon;
 }
 
-body{
-    background-image: linear-gradient(#3498db, #2980b9);
-    background-attachment: fixed;
+.here{
+    color: orange;
 }
 
-.input{
+.sendWhatsapp {
+  background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+  border: 0;
+  border-radius: 12px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 2.5;
+  outline: transparent;
+  padding: 0 1rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+
+.sendWhatsapp:not([disabled]):focus {
+  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+}
+
+.sendWhatsapp:not([disabled]):hover {
+  box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+}
+
+.activity{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     padding: 1vmax;
-
-    background-color: #3498db;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
 }
 
-.results{
-    padding: 1vmax;
-    /* margin: 1vmax; */
-    color: #ecf0f1;
+.activities{
+    margin-top: 2vmax;
 }
 
-input{
-    color: #ecf0f1;
-    font-family: inherit;    
-    border: none;
-    border-bottom: 0.5px solid #ecf0f1;
-    background: none;
-    font-size: 1em;
-    align-self: center;
+
+
+.right{
+    text-align: right;
 }
 
-input:focus{
-    outline: none;
+.center{
+    text-align: center;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #ecf0f1;
-    opacity: 1; /* Firefox */
-  }
-
-  .fa-search{
-    color: #ecf0f1;
-    cursor: pointer;
-    padding-left: 5vmax;
-  }
-
-  .results{
-      display: grid;
-    grid-gap: 2vmax;
-  }
-
-  .entry{
-      display: grid;
-      grid-template-areas: 
-      "s t i"
-      "s n c";
-      grid-template-columns: 1fr 8fr 8fr;
-      box-shadow: 1px 1px 3px #2980b9;
-  }
-
-.temp{grid-area: t; justify-self: center; font-size: 7vmax;}
-.city{grid-area: n; justify-self: center;}
-.entry>img{grid-area: i; justify-self: center;}
-.condition{grid-area: c; justify-self: center;}
-.toggle{grid-area: s; align-self: center; justify-self: center; color: #2c3e50;}
-.remove{color: #902D41;}
-.save{color: #404E4D;}
