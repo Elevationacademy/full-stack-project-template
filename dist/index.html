@@ -1,26 +1,340 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>WhetherWeather</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
-        crossorigin="anonymous">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Amani</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/80f5cec321.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <link href="./bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="./bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="logo.png" />
+    <title>Amani</title>
+  </head>
 
-</head>
+  <body>
+    <button
+        type="button"
+        class="btn bg-secondary-subtle btn-floating btn-lg"
+        id="btn-back-to-top"
+        onclick="backToTop()">
+  <i class="fas fa-arrow-up"></i>
+</button>
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"
+          ><img
+            src="logo.png"
+            alt="Logo"
+            width="30"
+            height="24"
+            class="d-inline-block align-text-top"
+          />
+          Amani</a
+        >
+        <button
+          class="navbar-toggler text-warning"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarTogglerMenu"
+          aria-controls="navbarTogglerMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerMenu">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="#"
+                onclick="init()"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#filter"
+                data-bs-toggle="collapse"
+                data-bs-target="#filter-container"
+                >Search</a
+              >
+            </li>
 
-<body>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                data-bs-toggle="modal"
+                data-bs-target="#addActivity"
+                >Add activity</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="myActivity()"
+                >My activities</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div id="filter-container" class="collapse container "></div>
+    <div id="activities-container" class="container mt-4"></div>
+
+    <script id="activities-template" type="text/x-handlebars-template">
+      <div class="row activities">
+        {{#each activities}}
+          <div
+            class="col-sm-12 col-md-6 col-lg-4 activity mx-3 mb-3"
+            data-id="{{activityId}}"
+          >
+            <div class="center">
+              <h3>
+                {{activityName}}
+              </h3>
+
+            </div>
+
+            <div class="right">
+              <i class="fa-regular fa-calendar-check"></i>
+              {{date}}
+            </div>
+            <div><b>To:</b> {{to}}</div>
+            <div><b>From:</b> {{from}}</div>
+            <div class="Line"><span><b>Transportation:</b>
+              <i class="fa-solid {{icon}}"></i></span>
+              <span>
+                {{#if capacity}}<b>Capacity:</b>{{capacity}}{{/if}}</span></div>
+            <div><b>Preffered Gender:</b> {{genderText}}</div>
+            <div class="right">
+              <a
+                aria-label="Chat on WhatsApp"
+                class="sendWhatsapp"
+                href="https://wa.me/{{telephone}}"
+              ><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+            <div></div>
+          </div>
+        {{/each}}
+      </div>
+    </script>
+
+    <script id="add-activity-template" type="text/x-handlebars-template">
+      <div
+        class="modal fade"
+        id="addActivity"
+        tabindex="-1"
+        aria-labelledby="addActivityLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addActivityLabel">Add activity</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+              <form onsubmit="addActivity();return false">
+            <div class="modal-body">
+                <div class="mb-3">
+                  <label
+                    for="group"
+                    class="col-form-label"
+                  ><b>Transportation Type:</b></label>
+                  <select
+                    id="transportationType"
+                    class="form-select"
+                    aria-label="Default select example"
+                    required
+                  >
+                    <option value="" selected>choose a transportation</option>
+                    {{#each transportation}}
+                      <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                  </select>
+                  <div class="mb-3" id="capacityInput" style="display: none;">
+                  <b><label for="capacity" class="col-form-label">Capacity:</label></b>
+                  <input type="number" class="form-control" id="capacity" value="4"/>
+                </div>
+
+                </div>
+                <div class="mb-3">
+                 <input type="radio" id="toSchool" name="activityType" value="toSchool" onchange="changeText()" checked>
+                 <label for="toSchool">From</label>
+                 <input type="radio" id="fromSchool" name="activityType" onchange="changeText()" value="fromSchool">
+                 <label for="fromSchool">To</label>
+                  <input type="text" class="form-control" id="location" required/>
+                </div>
+                <div>
+                 <b id="picked">To</b><b>:</b> {{university}}
+                </div>
+
+                <div class="mb-3">
+                  <b><label for="date" class="col-form-label">Date:</label></b>
+                  <input type="date" class="form-control" id="date" required/>
+                </div>
+                <input type="checkbox" id="gender" name="interest" value="gender" />
+                <label for="gender">Do you prefer same gender to student go with you?</label>
+
+            </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >Close</button>
+                  <input value="Add" type="submit" class="btn btn-warning" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script id="filter-activities-template" type="text/x-handlebars-template">
+      <div>
+
+        <div class="mb-3">
+          <label for="group" class="col-form-label"><b>Transportation Type:</b></label>
+          <select
+            id="transportationTypeFilter"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option value="" selected>choose a transportation</option>
+            {{#each transportation}}
+              <option value="{{this}}">{{this}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <input
+            type="radio"
+            id="toSchoolFilter"
+            name="location"
+            value="toSchool"
+            onchange="changeTextFilter()"
+            checked
+          />
+          <label for="toSchoolFilter">From</label>
+          <input
+            type="radio"
+            id="fromSchoolFilter"
+            name="location"
+            onchange="changeTextFilter()"
+            value="fromSchool"
+          />
+          <label for="fromSchoolFilter">To</label>
+          <input type="text" class="form-control" id="locationFilter" />
+        </div>
+        <div>
+          <b id="pickedFilter">To</b><b>:</b>
+          {{university}}
+        </div>
+
+        <div class="mb-3">
+          <b><label for="dateFilter" class="col-form-label">Date:</label></b>
+          <input type="date" class="form-control" id="dateFilter" />
+        </div>
+        <input
+          type="checkbox"
+          id="genderFilter"
+          name="interest"
+          value="gender"
+        />
+        <label for="genderFilter">Search only according to my gender</label>
+        <div class="right">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-toggle="collapse"
+            data-bs-target="#filter-container"
+          >Close</button>
+          <button
+            type="button"
+            onclick="filterActivity()"
+            class="btn btn-warning"
+          >Search</button>
+        </div>
+      </div>
+    </script>
+
+    <script id="my-activities-template" type="text/x-handlebars-template">
+      <div class="row activities">
+        {{#each myActivities}}
+          <div
+            class="col-sm-12 col-md-6 col-lg-4 activity mb-3 mx-3"
+            data-id="{{activityId}}"
+          >
+            <div class="center">
+              <h3>
+                {{activityName}}
+              </h3>
+
+            </div>
+
+            <div class="right">
+              <i class="fa-regular fa-calendar-check"></i>
+              {{date}}
+            </div>
+            <div><b>To:</b> {{to}}</div>
+            <div><b>From:</b> {{from}}</div>
+            <div class="Line"><span><b>Transportation:</b>
+              <i class="fa-solid {{icon}}"></i></span>
+                <span>{{#if capacity}}<b>Capacity:</b><input type="number" class="form-control sameLine" id="capacity-{{activityId}}" value="{{capacity}}"/>{{/if}}</span></div>
+            <div><b>Preffered Gender:</b> {{genderText}}</div>
+            <div class="right">
+              <button
+                class="sendWhatsapp"
+                onclick="editActivity('{{activityId}}')"
+              >
+              <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+
+              <button
+                class="sendWhatsapp"
+                onclick="deleteActivity('{{activityId}}')"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            <div></div>
+          </div>
+        {{/each}}
+      </div>
+    </script>
 
     <script src="./jquery/dist/jquery.js"></script>
+    <script src="./models/Activity.js"></script>
     <script src="./handlebars/dist/handlebars.js"></script>
-    <script src="DataModel.js"></script>
-    <script src="Renderer.js"></script>
+    <script src="utils.js"></script>
+    <script src="./models/ActivityModel.js"></script>
+    <script src="./models/ActivityController.js"></script>
+    <script src="./models/Renderer.js"></script>
     <script src="main.js"></script>
-</body>
-
-
+  </body>
 </html>
